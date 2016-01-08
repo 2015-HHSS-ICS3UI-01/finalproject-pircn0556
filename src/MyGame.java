@@ -4,8 +4,14 @@
  */
 
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -19,16 +25,39 @@ import javax.swing.JFrame;
 // make sure you rename this class if you are doing a copy/paste
 public class MyGame extends JComponent{
 
+    //block
+    ArrayList<Rectangle> blocks = new ArrayList<>();
+    
+    
+    
+    
+    
+    
+    
     // Height and Width of our game
-    static final int WIDTH = 800;
-    static final int HEIGHT = 600;
+    static final int WIDTH = 710;
+    static final int HEIGHT = 950;
     
     // sets the framerate and delay for our game
     // you just need to select an approproate framerate
     long desiredFPS = 60;
     long desiredTime = (1000)/desiredFPS;
     
-
+    //colours
+    Color border = new Color(117,16,53);
+    
+    
+    
+    
+    public BufferedImage loadImage(String filename){
+        BufferedImage img = null;
+        try{
+            img =ImageIO.read(new File(filename));
+        }catch(Exception e){
+            System.out.println("Error loading "+filename);
+        }
+        return img;
+    }
     
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
@@ -40,6 +69,18 @@ public class MyGame extends JComponent{
         g.clearRect(0, 0, WIDTH, HEIGHT);
         
         // GAME DRAWING GOES HERE 
+        g.setColor(Color.BLACK);
+        //create background
+        g.fillRect(0, 0, 750, 950);
+
+        //go through the blocks
+        g.setColor(border);
+        for (Rectangle block : blocks) {
+            //draw the block
+            g.fillRect(block.x, block.y, block.width, block.height);
+        }
+        
+        
         
         
         // GAME DRAWING ENDS HERE
@@ -50,6 +91,48 @@ public class MyGame extends JComponent{
     // In here is where all the logic for my game will go
     public void run()
     {
+        //initial things to do before game starts
+        //add blocks
+            //border
+        blocks.add(new Rectangle(0, 855, 770, 17));
+        blocks.add(new Rectangle(0,80,17,780));
+        blocks.add(new Rectangle(693,80,17,780));
+        blocks.add(new Rectangle(0,80,770,17));
+            //Inside border blocks
+        blocks.add(new Rectangle(55,130,60,60));
+        blocks.add(new Rectangle(145,130,30,60));
+        blocks.add(new Rectangle(55,220,90,60));
+        blocks.add(new Rectangle(570,220,90,60));
+        blocks.add(new Rectangle(600,130,60,60));
+        blocks.add(new Rectangle(540,130,30,60));
+        blocks.add(new Rectangle(55,310,30,90));
+        blocks.add(new Rectangle(85,370,30,30));
+        blocks.add(new Rectangle(55,430,60,30));
+        blocks.add(new Rectangle(85,460,30,30));
+        blocks.add(new Rectangle(85,520,30,60));
+        blocks.add(new Rectangle(55,550,30,30));
+        blocks.add(new Rectangle(55,610,30,30));
+        blocks.add(new Rectangle(55,670,30,60));
+        blocks.add(new Rectangle(85,700,90,30));
+        blocks.add(new Rectangle(55,760,120,60));
+        blocks.add(new Rectangle(115,610,60,60));
+        blocks.add(new Rectangle(145,310,30,120));
+        blocks.add(new Rectangle(145,460,30,120));
+        blocks.add(new Rectangle(205,370,120,30));
+        blocks.add(new Rectangle(205,400,30,60));
+        blocks.add(new Rectangle(205,510,30,90));
+        blocks.add(new Rectangle(235,570,90,30));
+        blocks.add(new Rectangle(385,570,120,30));
+        blocks.add(new Rectangle(475,510,30,60));
+        blocks.add(new Rectangle(475,370,30,90));
+        blocks.add(new Rectangle(385,370,90,30));
+        blocks.add(new Rectangle(265,310,180,30));
+        
+        
+
+
+
+        //END INITIAL THINGS TO DO
         // Used to keep track of time used to draw and update the game
         // This is used to limit the framerate later on
         long startTime;
