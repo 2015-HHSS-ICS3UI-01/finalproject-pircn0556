@@ -120,13 +120,55 @@ public class MyGame extends JComponent{
         blocks.add(new Rectangle(145,460,30,120));
         blocks.add(new Rectangle(205,370,120,30));
         blocks.add(new Rectangle(205,400,30,60));
-        blocks.add(new Rectangle(205,510,30,90));
-        blocks.add(new Rectangle(235,570,90,30));
-        blocks.add(new Rectangle(385,570,120,30));
-        blocks.add(new Rectangle(475,510,30,60));
+        blocks.add(new Rectangle(205,520,30,90));
+        blocks.add(new Rectangle(235,580,90,30));
+        blocks.add(new Rectangle(385,580,120,30));
+        blocks.add(new Rectangle(475,520,30,60));
         blocks.add(new Rectangle(475,370,30,90));
         blocks.add(new Rectangle(385,370,90,30));
         blocks.add(new Rectangle(265,310,180,30));
+        blocks.add(new Rectangle(175,220,120,60));
+        blocks.add(new Rectangle(205,130,60,60));
+        blocks.add(new Rectangle(205,310,30,30)); 
+        blocks.add(new Rectangle(265,640,180,30));
+        blocks.add(new Rectangle(325,220,60,90));
+        blocks.add(new Rectangle(325,670,60,90));
+        blocks.add(new Rectangle(205,640,30,30));
+        blocks.add(new Rectangle(205,700,90,30));
+        blocks.add(new Rectangle(205,760,60,60));
+        blocks.add(new Rectangle(450,130,60,60));
+        blocks.add(new Rectangle(420,220,120,60));
+        blocks.add(new Rectangle(480,310,30,30));
+        blocks.add(new Rectangle(540,310,30,120));
+        blocks.add(new Rectangle(630,310,30,90));
+        blocks.add(new Rectangle(600,370,30,30));
+        blocks.add(new Rectangle(600,430,60,30));
+        blocks.add(new Rectangle(600,460,30,30));
+        blocks.add(new Rectangle(600,520,30,60));
+        blocks.add(new Rectangle(630,550,30,30));
+        blocks.add(new Rectangle(540,460,30,120));
+        blocks.add(new Rectangle(540,610,60,60));
+        blocks.add(new Rectangle(475,640,30,30));
+        blocks.add(new Rectangle(415,700,90,30));
+        blocks.add(new Rectangle(445,760,60,60));
+        blocks.add(new Rectangle(540,760,120,60));
+        blocks.add(new Rectangle(540,700,120,30));
+        blocks.add(new Rectangle(630,670,30,30));
+        blocks.add(new Rectangle(630,610,30,30));
+        
+        //portal things
+        blocks.add(new Rectangle(295,790,30,65));
+        blocks.add(new Rectangle(385,790,30,65));
+        blocks.add(new Rectangle(295,95,30,95));
+        blocks.add(new Rectangle(385,95,30,95));
+        
+        
+            //'ghost' place, possible 'next-level' tp as well?
+        blocks.add(new Rectangle(385,430,60,30));
+        blocks.add(new Rectangle(415,460,30,90));
+        blocks.add(new Rectangle(265,430,60,30));
+        blocks.add(new Rectangle(265,460,30,90));
+        blocks.add(new Rectangle(295,520,120,30));
         
         
 
