@@ -8,6 +8,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -23,20 +28,31 @@ import javax.swing.JFrame;
 
 
 // make sure you rename this class if you are doing a copy/paste
-public class MyGame extends JComponent{
-
-    //block
-    ArrayList<Rectangle> blocks = new ArrayList<>();
-    
-    
-    
-    
-    
-    
-    
+public class MyGame extends JComponent implements KeyListener, MouseMotionListener, MouseListener{
     // Height and Width of our game
     static final int WIDTH = 710;
     static final int HEIGHT = 950;
+    
+    
+    //block
+    ArrayList<Rectangle> blocks = new ArrayList<>();
+    
+    //player
+    Rectangle player = new Rectangle(25, 780, 23, 23);
+    int moveX = 0;
+    int moveY = 0;
+    
+    //keyboard variables
+    boolean up = false;
+    boolean down = false;
+    boolean right = false;
+    boolean left = false;
+    
+    
+    
+    
+    
+    
     
     // sets the framerate and delay for our game
     // you just need to select an approproate framerate
@@ -79,6 +95,10 @@ public class MyGame extends JComponent{
             //draw the block
             g.fillRect(block.x, block.y, block.width, block.height);
         }
+        
+        
+        g.setColor(Color.blue);
+        g.fillRect(player.x, player.y, player.width, player.height);
         
         
         
@@ -190,7 +210,62 @@ public class MyGame extends JComponent{
             
             // all your game rules and move is done in here
             // GAME LOGIC STARTS HERE 
+            if (left) {
+                moveX = -2;
+                moveY = 0;
+            } else if (right) {
+                moveX = 2;
+                moveY = 0;
+            } else if(up){
+                moveY = -2;
+                moveX = 0;
+            }else if(down){
+                moveY = 2;
+                moveX = 0;
+            }else{
+                moveX = 0;
+                moveY=0;
+            }
             
+            //move the player
+            player.x = player.x + moveX;
+            player.y = player.y + moveY;
+          
+            //if feet of player become lower than the screen
+            if (player.y + player.height > HEIGHT) {
+                player.y = HEIGHT - player.height;
+
+            }
+             
+            //go through all blocks
+            for (Rectangle block : blocks) {
+                //is the player hitting a block
+                if (player.intersects(block)) {
+                    //get the collision rectangle
+                    Rectangle intersection = player.intersection(block);
+
+                    //fix the x movement
+                    if (intersection.width < intersection.height) {
+                       //player on the left
+                        if(player.x < block.x){
+                            //move the player the overlap
+                            player.x = player.x - intersection.width; 
+                       }else{
+                           player.x = player.x + intersection.width; 
+                        }
+                    }else{//fix the y
+                       //hit the block with my head
+                        if(player.y > block.y){
+                            player.y = player.y + intersection.height;
+                            moveY = 0;
+                        }else{
+                            player.y = player.y - intersection.height;
+                            moveY = 0;
+                            
+                        }
+                    }                   
+                }
+            }
             
 
             // GAME LOGIC ENDS HERE 
@@ -237,7 +312,73 @@ public class MyGame extends JComponent{
         // shows the window to the user
         frame.setVisible(true);
         
+        //add the listeners
+        frame.addKeyListener(game); //keyboard
+        game.addMouseListener(game); //mouse
+        game.addMouseMotionListener(game); //mouse
+        
         // starts my game loop
         game.run();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT) {
+            left = true;
+        } else if (key == KeyEvent.VK_RIGHT) {
+            right = true;
+        }else if(key == KeyEvent.VK_UP){
+            up = true;
+        }else if(key == KeyEvent.VK_DOWN){
+            down = true;  
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT) {
+            left = false;
+        } else if (key == KeyEvent.VK_RIGHT) {
+            right = false;
+        }else if(key == KeyEvent.VK_UP){
+            up = false;
+        }else if(key == KeyEvent.VK_DOWN){
+            down = false;  
+        }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }
