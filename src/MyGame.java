@@ -1,10 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
+/* * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -32,6 +32,8 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     BufferedImage cookiezi = loadImage("CookieZi.png");
     BufferedImage blockimg = loadImage("single blockk.png");
     BufferedImage SS = loadImage("SS (superpoints).png");
+    
+    //ARRAYS
     //block
     ArrayList<Rectangle> blocks = new ArrayList<>();
     //border
@@ -39,6 +41,11 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     //point circle things
     ArrayList<Rectangle> points = new ArrayList<>();
     ArrayList<Rectangle> superpoints = new ArrayList<>();
+    //health hearts
+    //ArrayList
+    
+    Font pixel = new Font("arial",Font.BOLD,20);
+    
     //player
     Rectangle player = new Rectangle(345, 585, 23, 23);
     //moving variables
@@ -65,6 +72,9 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         }
         return img;
     }
+    
+    int Score = 0;
+    
     
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
@@ -114,8 +124,9 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
 
 
         //Text
-        g.setColor(Color.BLUE);
-        g.drawString("Score:", 35, 40);
+        g.setColor(Color.WHITE);
+        g.setFont(pixel);
+        g.drawString("Score: "+Score, 35, 40);
         g.drawString("Health:", 500, 40);
 
 
@@ -587,7 +598,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             //normal points
             for (Rectangle point : points) {
                 if (player.intersects(point)) {
-
+                    Score = Score + 100;
                     points.remove(point);
                     break;
                 }
@@ -596,6 +607,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
                 //also making the 'monsters' go neutral so player can eat them
             for(Rectangle superpoint : superpoints){
                 if(player.intersects(superpoint)){
+                    Score = Score + 300;
                     superpoints.remove(superpoint);
                     break;
                 }
