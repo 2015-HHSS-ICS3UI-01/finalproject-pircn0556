@@ -32,6 +32,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     BufferedImage cookiezi = loadImage("CookieZi.png");
     BufferedImage blockimg = loadImage("single blockk.png");
     BufferedImage SS = loadImage("SS (superpoints).png");
+    BufferedImage heart = loadImage("health.png");
     
     //ARRAYS
     //block
@@ -42,9 +43,10 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     ArrayList<Rectangle> points = new ArrayList<>();
     ArrayList<Rectangle> superpoints = new ArrayList<>();
     //health hearts
-    //ArrayList
+    ArrayList<Rectangle> health = new ArrayList<>();
     
-    Font pixel = new Font("arial",Font.BOLD,20);
+    //Adding Font
+    Font pixel = new Font("ISOCTEUR",Font.BOLD,20);
     
     //player
     Rectangle player = new Rectangle(345, 585, 23, 23);
@@ -108,6 +110,13 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             g.drawImage(SS, superpoint.x, superpoint.y, superpoint.height, superpoint.width, null);
         }
         
+        //hearts
+        g.setColor(Color.BLACK);
+        for (Rectangle hearts : health) {
+            //draw the poitns
+            g.drawImage(heart, hearts.x, hearts.y, hearts.height, hearts.width, null);
+        }
+        
         //rest of blocks
         g.setColor(Color.BLACK);
         for (Rectangle block : blocks) {
@@ -126,8 +135,8 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         //Text
         g.setColor(Color.WHITE);
         g.setFont(pixel);
-        g.drawString("Score: "+Score, 35, 40);
-        g.drawString("Health:", 500, 40);
+        g.drawString("Score: "+Score, 35, 60);
+        g.drawString("Health:", 470, 60);
 
 
 
@@ -491,6 +500,13 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         superpoints.add(new Rectangle(655,105,25,25));
         superpoints.add(new Rectangle(655,819,25,25));
 
+        //health hearts
+        
+        health.add(new Rectangle(575,45,20,20));
+        health.add(new Rectangle(600,45,20,20));
+        health.add(new Rectangle(625,45,20,20));
+        health.add(new Rectangle(650,45,20,20));
+        health.add(new Rectangle(675,45,20,20));
 
 
         //END INITIAL THINGS TO DO
@@ -611,6 +627,11 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
                     superpoints.remove(superpoint);
                     break;
                 }
+            }
+            
+            //health points
+            for(Rectangle hearts : health){
+                
             }
 
             // GAME LOGIC ENDS HERE 
