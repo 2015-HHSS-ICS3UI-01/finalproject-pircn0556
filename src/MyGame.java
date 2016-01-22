@@ -25,15 +25,44 @@ import javax.swing.JFrame;
  */
 // make sure you rename this class if you are doing a copy/paste
 public class MyGame extends JComponent implements KeyListener, MouseMotionListener, MouseListener {
+
+    public void monsterturn() {
+        int randNum = (int) (Math.random() * (4));
+        if (randNum == 0) {
+            Xmove = 1;
+            Ymove = 0;
+        }
+        if (randNum == 1) {
+            Xmove = -1;
+            Ymove = 0;
+        }
+        if (randNum == 2) {
+            Xmove = 0;
+            Ymove = 1;
+        }
+        if (randNum == 3) {
+            Xmove = 0;
+            Ymove = -1;
+        }
+
+
+    }
     // Height and Width of our game
     static final int WIDTH = 710;
     static final int HEIGHT = 950;
     //images
+    //player
     BufferedImage cookiezi = loadImage("CookieZi.png");
+    //for game (blocks, superpoints, etc.)
     BufferedImage blockimg = loadImage("single blockk.png");
     BufferedImage SS = loadImage("SS (superpoints).png");
     BufferedImage heart = loadImage("health.png");
-    
+    BufferedImage title = loadImage("Game Title.jpg");
+    //the chasing monsters
+    BufferedImage peppy = loadImage("peppy.png");
+    BufferedImage hvick = loadImage("hvick.png");
+    BufferedImage rrtyui = loadImage("rrtyui.png");
+    BufferedImage azer = loadImage("azer.png");
     //ARRAYS
     //block
     ArrayList<Rectangle> blocks = new ArrayList<>();
@@ -44,20 +73,27 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     ArrayList<Rectangle> superpoints = new ArrayList<>();
     //health hearts
     ArrayList<Rectangle> health = new ArrayList<>();
-    
     //Adding Font
-    Font pixel = new Font("ISOCTEUR",Font.BOLD,20);
-    
+    Font pixel = new Font("ISOCTEUR", Font.BOLD, 20);
+    //monsters
+    Rectangle monsterone = new Rectangle(310, 470, 23, 25);
+    Rectangle monstertwo = new Rectangle(330,470,25,25);
+    Rectangle monsterthree = new Rectangle(310,500,25,25);
+    Rectangle monsterfour = new Rectangle(330,500,25,25);
     //player
     Rectangle player = new Rectangle(345, 585, 23, 23);
-    //moving variables
+    //player moving variables
     int moveX = 0;
     int moveY = 0;
+    //monster moving variables 
+    int Xmove = 1;
+    int Ymove = 0;
     //keyboard variables
     boolean up = false;
     boolean down = false;
     boolean right = false;
     boolean left = false;
+    int screen = 0;
     //colours
     Color border = new Color(255, 74, 243);
     // sets the framerate and delay for our game
@@ -65,6 +101,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     long desiredFPS = 60;
     long desiredTime = (1000) / desiredFPS;
     //To input images
+
     public BufferedImage loadImage(String filename) {
         BufferedImage img = null;
         try {
@@ -74,10 +111,8 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         }
         return img;
     }
-    
     int Score = 0;
-    
-    
+
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
     // NOTE: This is already double buffered!(helps with framerate/speed)
@@ -86,59 +121,73 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         // always clear the screen first!
         g.clearRect(0, 0, WIDTH, HEIGHT);
         // GAME DRAWING GOES HERE 
-        g.setColor(Color.BLACK);
-        //create background
-        g.fillRect(0, 0, 750, 950);
-        //Border blocks
-        g.setColor(border);
-        //go through the blocks
-        for (Rectangle block : borderwall) {
-            //draw the block
-            g.fillRect(block.x, block.y, block.width, block.height);
+        //game title screen showing
+        if (screen == 0) {
+            g.drawImage(title, 0, 0, WIDTH, HEIGHT, null);
         }
+        if (screen == 1) {
+            g.setColor(Color.BLACK);
+            //create background
+            g.fillRect(0, 0, 750, 950);
+            //Border blocks
+            g.setColor(border);
+            //go through the blocks
+            for (Rectangle block : borderwall) {
+                //draw the block
+                g.fillRect(block.x, block.y, block.width, block.height);
+            }
 
-        //for points
-        g.setColor(Color.WHITE);
-        for (Rectangle point : points) {
-            g.fillOval(point.x, point.y, point.width, point.height);
-        }
-        
-        //super points
-        g.setColor(Color.BLACK);
-        for (Rectangle superpoint : superpoints) {
-            //draw the poitns
-            g.drawImage(SS, superpoint.x, superpoint.y, superpoint.height, superpoint.width, null);
-        }
-        
-        //hearts
-        g.setColor(Color.BLACK);
-        for (Rectangle hearts : health) {
-            //draw the poitns
-            g.drawImage(heart, hearts.x, hearts.y, hearts.height, hearts.width, null);
-        }
-        
-        //rest of blocks
-        g.setColor(Color.BLACK);
-        for (Rectangle block : blocks) {
-            //draw the block
-            for (int x = block.x; x < block.x + block.width; x = x + 30) {
-                for (int y = block.y; y < block.y + block.height; y = y + 30) {
-                    g.drawImage(blockimg, x, y, 30, 30, null);
+            //for points
+            g.setColor(Color.WHITE);
+            for (Rectangle point : points) {
+                g.fillOval(point.x, point.y, point.width, point.height);
+            }
+
+            //super points
+            g.setColor(Color.BLACK);
+            for (Rectangle superpoint : superpoints) {
+                //draw the poitns
+                g.drawImage(SS, superpoint.x, superpoint.y, superpoint.height, superpoint.width, null);
+            }
+
+            //hearts
+            g.setColor(Color.BLACK);
+            for (Rectangle hearts : health) {
+                //draw the poitns
+                g.drawImage(heart, hearts.x, hearts.y, hearts.height, hearts.width, null);
+            }
+
+            //rest of blocks
+            g.setColor(Color.BLACK);
+            for (Rectangle block : blocks) {
+                //draw the block
+                for (int x = block.x; x < block.x + block.width; x = x + 30) {
+                    for (int y = block.y; y < block.y + block.height; y = y + 30) {
+                        g.drawImage(blockimg, x, y, 30, 30, null);
+                    }
                 }
             }
+            //monsters
+            //first one
+            g.drawImage(peppy, monsterone.x, monsterone.y, monsterone.width, monsterone.height, null);
+            //second one
+            g.drawImage(hvick, monstertwo.x,monstertwo.y,monstertwo.width,monstertwo.height,null);
+            //third one
+            g.drawImage(rrtyui,monsterthree.x,monsterthree.y,monsterthree.width,monsterthree.height,null);
+            //fourth one
+            g.drawImage(azer,monsterfour.x,monsterfour.y,monsterfour.width,monsterfour.height,null);
+            //player
+            g.setColor(Color.black);
+            g.drawImage(cookiezi, player.x, player.y, player.width, player.height, null);
+
+
+            //Text
+            g.setColor(Color.WHITE);
+            g.setFont(pixel);
+            g.drawString("Score: " + Score, 35, 60);
+            g.drawString("Health:", 470, 60);
+
         }
-        //player
-        g.setColor(Color.black);
-        g.drawImage(cookiezi, player.x, player.y, player.width, player.height, null);
-
-
-        //Text
-        g.setColor(Color.WHITE);
-        g.setFont(pixel);
-        g.drawString("Score: "+Score, 35, 60);
-        g.drawString("Health:", 470, 60);
-
-
 
 
         // GAME DRAWING ENDS HERE
@@ -161,7 +210,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         blocks.add(new Rectangle(55, 130, 60, 60));
         blocks.add(new Rectangle(145, 130, 30, 60));
         blocks.add(new Rectangle(55, 220, 90, 60));
-        blocks.add(new Rectangle(570, 220, 90, 60));
+        blocks.add(new Rectangle(565, 220, 90, 60));
         blocks.add(new Rectangle(595, 130, 60, 60));
         blocks.add(new Rectangle(535, 130, 30, 60));
         blocks.add(new Rectangle(55, 310, 30, 90));
@@ -219,12 +268,11 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         blocks.add(new Rectangle(385, 790, 30, 60));
         blocks.add(new Rectangle(295, 95, 30, 90));
         blocks.add(new Rectangle(385, 95, 30, 90));
-        //'ghost' place, possible 'next-level' tp as well?
-        blocks.add(new Rectangle(385, 430, 60, 30));
-        blocks.add(new Rectangle(415, 460, 30, 90));
-        blocks.add(new Rectangle(265, 430, 60, 30));
-        blocks.add(new Rectangle(265, 460, 30, 90));
-        blocks.add(new Rectangle(295, 520, 120, 30));
+        //'monster' place
+        blocks.add(new Rectangle(415, 430, 30, 30));
+        blocks.add(new Rectangle(415, 520, 30, 30));
+        blocks.add(new Rectangle(265, 430, 30, 30));
+        blocks.add(new Rectangle(265, 520, 30, 30));
 
         //Points
         //1st column
@@ -495,18 +543,17 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         points.add(new Rectangle(665, 800, 8, 8));
 
         //super points
-        superpoints.add(new Rectangle(30,105,25,25));
-        superpoints.add(new Rectangle(30,819,25,25));
-        superpoints.add(new Rectangle(655,105,25,25));
-        superpoints.add(new Rectangle(655,819,25,25));
+        superpoints.add(new Rectangle(30, 105, 25, 25));
+        superpoints.add(new Rectangle(30, 819, 25, 25));
+        superpoints.add(new Rectangle(655, 105, 25, 25));
+        superpoints.add(new Rectangle(655, 819, 25, 25));
 
         //health hearts
-        
-        health.add(new Rectangle(575,45,20,20));
-        health.add(new Rectangle(600,45,20,20));
-        health.add(new Rectangle(625,45,20,20));
-        health.add(new Rectangle(650,45,20,20));
-        health.add(new Rectangle(675,45,20,20));
+        health.add(new Rectangle(575, 45, 20, 20));
+        health.add(new Rectangle(600, 45, 20, 20));
+        health.add(new Rectangle(625, 45, 20, 20));
+        health.add(new Rectangle(650, 45, 20, 20));
+        health.add(new Rectangle(675, 45, 20, 20));
 
 
         //END INITIAL THINGS TO DO
@@ -514,6 +561,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         // This is used to limit the framerate later on
         long startTime;
         long deltaTime;
+        monsterturn();
 
         // the main game loop section
         // game will end if you set done = false;
@@ -523,115 +571,187 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             startTime = System.currentTimeMillis();
             // all your game rules and move is done in here
             // GAME LOGIC STARTS HERE 
-            if (player.x <= 385 && player.x >= 0 && player.y <= 80) {
-                player.x = 350;
-                player.y = 825;
-            } else if (player.x <= 385 && player.x >= 0 && player.y >= 850) {
-                player.x = 350;
-                player.y = 90;
-            }
-            if (left) {
-                moveX = -2;
-                moveY = 0;
-            } else if (right) {
-                moveX = 2;
-                moveY = 0;
-            } else if (up) {
-                moveY = -2;
-                moveX = 0;
-            } else if (down) {
-                moveY = 2;
-                moveX = 0;
-            } else {
-                moveX = 0;
-                moveY = 0;
-            }
-            //move the player
-            player.x = player.x + moveX;
-            player.y = player.y + moveY;
-            //if feet of player become lower than the screen
-            if (player.y + player.height > HEIGHT) {
-                player.y = HEIGHT - player.height;
-            }
-            //go through all blocks
-            for (Rectangle block : blocks) {
-                //is the player hitting a block
-                if (player.intersects(block)) {
-                    //get the collision rectangle
-                    Rectangle intersection = player.intersection(block);
+            //title screen off, game on
+            if (screen == 1) {
 
-                    //fix the x movement
-                    if (intersection.width < intersection.height) {
-                        //player on the left
-                        if (player.x < block.x) {
-                            //move the player the overlap
-                            player.x = player.x - intersection.width;
-                        } else {
-                            player.x = player.x + intersection.width;
+                //teleport from one side to another
+                if (player.x <= 385 && player.x >= 0 && player.y <= 80) {
+                    player.x = 350;
+                    player.y = 825;
+                } else if (player.x <= 385 && player.x >= 0 && player.y >= 850) {
+                    player.x = 350;
+                    player.y = 90;
+                }
+
+
+                //changing variables to make player move 
+                if (left) {
+                    moveX = -2;
+                    moveY = 0;
+                } else if (right) {
+                    moveX = 2;
+                    moveY = 0;
+                } else if (up) {
+                    moveY = -2;
+                    moveX = 0;
+                } else if (down) {
+                    moveY = 2;
+                    moveX = 0;
+                } else {
+                    moveX = 0;
+                    moveY = 0;
+                }
+                //move the monster
+                monsterone.x = monsterone.x + Xmove;
+                monsterone.y = monsterone.y + Ymove;
+                //move the player
+                player.x = player.x + moveX;
+                player.y = player.y + moveY;
+                //if feet of player become lower than the screen
+                if (player.y + player.height > HEIGHT) {
+                    player.y = HEIGHT - player.height;
+                }
+
+                //dont go through the blocks
+                for (Rectangle block : blocks) {
+                    //is the player hitting a block
+                    if (player.intersects(block)) {
+                        //get the collision rectangle
+                        Rectangle intersection = player.intersection(block);
+
+                        //fix the x movement
+                        if (intersection.width < intersection.height) {
+                            //player on the left
+                            if (player.x < block.x) {
+                                //move the player the overlap
+                                player.x = player.x - intersection.width;
+                            } else {
+                                player.x = player.x + intersection.width;
+                            }
+                        } else {//fix the y
+                            //hit the block with my head
+                            if (player.y > block.y) {
+                                player.y = player.y + intersection.height;
+                                moveY = 0;
+                            } else {
+                                player.y = player.y - intersection.height;
+                                moveY = 0;
+                            }
                         }
-                    } else {//fix the y
-                        //hit the block with my head
-                        if (player.y > block.y) {
-                            player.y = player.y + intersection.height;
-                            moveY = 0;
-                        } else {
-                            player.y = player.y - intersection.height;
-                            moveY = 0;
+                       
+                    }
+                    
+                }
+                //dont go through all border blocks
+                for (Rectangle block : borderwall) {
+                    //is the player hitting a block
+                    if (player.intersects(block)) {
+                        //get the collision rectangle
+                        Rectangle intersection = player.intersection(block);
+
+                        //fix the x movement
+                        if (intersection.width < intersection.height) {
+                            //player on the left
+                            if (player.x < block.x) {
+                                //move the player the overlap
+                                player.x = player.x - intersection.width;
+                            } else {
+                                player.x = player.x + intersection.width;
+                            }
+                        } else {//fix the y
+                            //hit the block with my head
+                            if (player.y > block.y) {
+                                player.y = player.y + intersection.height;
+                                moveY = 0;
+                            } else {
+                                player.y = player.y - intersection.height;
+                                moveY = 0;
+                            }
                         }
                     }
                 }
-            }
-            //go through all border blocks
-            for (Rectangle block : borderwall) {
-                //is the player hitting a block
-                if (player.intersects(block)) {
-                    //get the collision rectangle
-                    Rectangle intersection = player.intersection(block);
+                for (Rectangle block : blocks) {
+                    //is the player hitting a block
+                    if (monsterone.intersects(block)) {
+                        monsterturn();
+                        //get the collision rectangle
+                        Rectangle intersection = monsterone.intersection(block);
 
-                    //fix the x movement
-                    if (intersection.width < intersection.height) {
-                        //player on the left
-                        if (player.x < block.x) {
-                            //move the player the overlap
-                            player.x = player.x - intersection.width;
-                        } else {
-                            player.x = player.x + intersection.width;
-                        }
-                    } else {//fix the y
-                        //hit the block with my head
-                        if (player.y > block.y) {
-                            player.y = player.y + intersection.height;
-                            moveY = 0;
-                        } else {
-                            player.y = player.y - intersection.height;
-                            moveY = 0;
+                        //fix the x movement
+                        if (intersection.width < intersection.height) {
+                            //player on the left
+                            if (monsterone.x < block.x) {
+                                //move the player the overlap
+                                monsterone.x = monsterone.x - intersection.width;
+                               
+                            } else {
+                                monsterone.x = monsterone.x + intersection.width;
+                             
+                            }
+                        } else {//fix the y
+                            //hit the block with my head
+                            if (monsterone.y > block.y) {
+                                monsterone.y = monsterone.y + intersection.height;
+                              
+
+                            } else {
+                                monsterone.y = monsterone.y - intersection.height;
+                                
+                            }
                         }
                     }
                 }
-            }
+                for (Rectangle block : borderwall) {
+                    //is the player hitting a block
+                    if (monsterone.intersects(block)) {
+                        monsterturn();
+                        //get the collision rectangle
+                        Rectangle intersection = monsterone.intersection(block);
 
-            //removing points from the game and adding them to the score
-            //normal points
-            for (Rectangle point : points) {
-                if (player.intersects(point)) {
-                    Score = Score + 100;
-                    points.remove(point);
-                    break;
+                        //fix the x movement
+                        if (intersection.width < intersection.height) {
+                            //player on the left
+                            if (monsterone.x < block.x) {
+                                //move the player the overlap
+                                monsterone.x = monsterone.x - intersection.width;
+                            } else {
+                                monsterone.x = monsterone.x + intersection.width;
+                            }
+                        } else {//fix the y
+                            //hit the block with my head
+                            if (monsterone.y > block.y) {
+                                monsterone.y = monsterone.y + intersection.height;
+                            } else {
+                                monsterone.y = monsterone.y - intersection.height;
+                            }
+                        }
+                    }
                 }
-            }
-            //super points
-                //also making the 'monsters' go neutral so player can eat them
-            for(Rectangle superpoint : superpoints){
-                if(player.intersects(superpoint)){
-                    Score = Score + 300;
-                    superpoints.remove(superpoint);
-                    break;
-                }
-            }
-            
-            //health points
-            for(Rectangle hearts : health){
                 
+                
+
+                //removing points circles from the game and adding them to the score
+                //normal points
+                for (Rectangle point : points) {
+                    if (player.intersects(point)) {
+                        Score = Score + 100;
+                        points.remove(point);
+                        break;
+                    }
+                }
+                //super points
+                //also making the 'monsters' go neutral so player can eat them
+                for (Rectangle superpoint : superpoints) {
+                    if (player.intersects(superpoint)) {
+                        Score = Score + 300;
+                        superpoints.remove(superpoint);
+                        break;
+                    }
+                }
+
+                //health points
+                for (Rectangle hearts : health) {
+                }
             }
 
             // GAME LOGIC ENDS HERE 
@@ -698,6 +818,9 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             up = true;
         } else if (key == KeyEvent.VK_DOWN) {
             down = true;
+            //if enter pressed, title screen goes away
+        } else if (key == KeyEvent.VK_ENTER) {
+            screen = 1;
         }
     }
 
