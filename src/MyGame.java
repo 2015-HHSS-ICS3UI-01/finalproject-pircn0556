@@ -45,7 +45,8 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             Ymove = -1;
         }
     }
-    public void monster2turn(){
+
+    public void monster2turn() {
         int randNum = (int) (Math.random() * (4));
         if (randNum == 0) {
             twoXmove = -1;
@@ -64,7 +65,8 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             twoYmove = -1;
         }
     }
-    public void monster3turn(){
+
+    public void monster3turn() {
         int randNum = (int) (Math.random() * (4));
         if (randNum == 0) {
             threeXmove = 1;
@@ -83,7 +85,8 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             threeYmove = -1;
         }
     }
-    public void monster4turn(){
+
+    public void monster4turn() {
         int randNum = (int) (Math.random() * (4));
         if (randNum == 0) {
             fourXmove = 1;
@@ -288,12 +291,13 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         blocks.add(new Rectangle(115, 610, 60, 60));
         blocks.add(new Rectangle(145, 310, 30, 120));
         blocks.add(new Rectangle(145, 460, 30, 120));
-        blocks.add(new Rectangle(205, 370, 120, 30));
+        blocks.add(new Rectangle(205, 370, 30, 30));
+        blocks.add(new Rectangle(265, 370, 60, 30));
         blocks.add(new Rectangle(205, 400, 30, 60));
         blocks.add(new Rectangle(205, 520, 30, 90));
         blocks.add(new Rectangle(235, 580, 90, 30));
-        blocks.add(new Rectangle(385, 580, 120, 30));
-        blocks.add(new Rectangle(475, 520, 30, 60));
+        blocks.add(new Rectangle(385, 580, 60, 30));
+        blocks.add(new Rectangle(475, 520, 30, 90));
         blocks.add(new Rectangle(475, 370, 30, 90));
         blocks.add(new Rectangle(385, 370, 90, 30));
         blocks.add(new Rectangle(265, 310, 180, 30));
@@ -978,17 +982,21 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
 
                 //health points
                 for (Rectangle hearts : health) {
-                if(player.intersects(monsterone )){
-                    health.remove(heart);
-                }else if(player.intersects(monstertwo)){
-                    health.remove(heart);
-                }else if(player.intersects(monsterthree)){
-                    health.remove(heart);
-                }else if(player.intersects(monsterfour)){
-                    health.remove(heart);
+                    if (player.intersects(monsterone)) {
+                        health.remove(hearts);
+                        break;
+                    } else if (player.intersects(monstertwo)) {
+                        health.remove(hearts);
+                        break;
+                    } else if (player.intersects(monsterthree)) {
+                        health.remove(hearts);
+                        break;
+                    } else if (player.intersects(monsterfour)) {
+                        health.remove(hearts);
+                        break;
+                    }
                 }
-                }
-                
+
             }
 
             // GAME LOGIC ENDS HERE 
