@@ -26,6 +26,8 @@ import javax.swing.JFrame;
 // make sure you rename this class if you are doing a copy/paste
 public class MyGame extends JComponent implements KeyListener, MouseMotionListener, MouseListener {
 
+    //Methods for the monsters to turn when they hit a wall
+    //First monster
     public void monsterturn() {
         int randNum = (int) (Math.random() * (4));
         if (randNum == 0) {
@@ -45,6 +47,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             Ymove = -1;
         }
     }
+//Second monster
 
     public void monster2turn() {
         int randNum = (int) (Math.random() * (4));
@@ -65,6 +68,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             twoYmove = -1;
         }
     }
+//Third monster
 
     public void monster3turn() {
         int randNum = (int) (Math.random() * (4));
@@ -85,6 +89,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             threeYmove = -1;
         }
     }
+//Fourth monster
 
     public void monster4turn() {
         int randNum = (int) (Math.random() * (4));
@@ -117,9 +122,13 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     BufferedImage heart = loadImage("health.png");
     BufferedImage title = loadImage("Game Title.jpg");
     //the chasing monsters
+    //1st
     BufferedImage peppy = loadImage("peppy.png");
+    //2nd
     BufferedImage hvick = loadImage("hvick.png");
+    //3rd
     BufferedImage rrtyui = loadImage("rrtyui.png");
+    //4th
     BufferedImage azer = loadImage("azer.png");
     //ARRAYS
     //block
@@ -160,7 +169,10 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     boolean down = false;
     boolean right = false;
     boolean left = false;
+    //for the main screen
     int screen = 0;
+    //for the game over screen
+    int gameover = 1;
     //colours
     Color border = new Color(255, 74, 243);
     // sets the framerate and delay for our game
@@ -178,11 +190,15 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         }
         return img;
     }
+    //Score count -- starts at 0
     int Score = 0;
+    //number of hearts
+    int heartcount = 5;
 
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
     // NOTE: This is already double buffered!(helps with framerate/speed)
+
     @Override
     public void paintComponent(Graphics g) {
         // always clear the screen first!
@@ -192,6 +208,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         if (screen == 0) {
             g.drawImage(title, 0, 0, WIDTH, HEIGHT, null);
         }
+
         if (screen == 1) {
             g.setColor(Color.BLACK);
             //create background
@@ -334,7 +351,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         blocks.add(new Rectangle(385, 790, 30, 60));
         blocks.add(new Rectangle(295, 95, 30, 90));
         blocks.add(new Rectangle(385, 95, 30, 90));
-        //'monster' place
+        //'monster' place (only single blocks because they don't move 'freely' enough to go through a enclosed cage thing
         blocks.add(new Rectangle(415, 430, 30, 30));
         blocks.add(new Rectangle(415, 520, 30, 30));
         blocks.add(new Rectangle(265, 430, 30, 30));
@@ -979,24 +996,30 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
                         break;
                     }
                 }
-
+                int score = 25600;
                 //health points
                 for (Rectangle hearts : health) {
                     if (player.intersects(monsterone)) {
                         health.remove(hearts);
+                        heartcount--;
                         break;
                     } else if (player.intersects(monstertwo)) {
                         health.remove(hearts);
+                        heartcount--;
                         break;
                     } else if (player.intersects(monsterthree)) {
                         health.remove(hearts);
+                        heartcount--;
                         break;
                     } else if (player.intersects(monsterfour)) {
                         health.remove(hearts);
+                        heartcount--;
                         break;
                     }
                 }
-
+                if (heartcount <= 0) {
+                    gameover = 0;
+                }
             }
 
             // GAME LOGIC ENDS HERE 
@@ -1022,7 +1045,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
      */
     public static void main(String[] args) {
         // creates a windows to show my game
-        JFrame frame = new JFrame("My Game");
+        JFrame frame = new JFrame("Osu! : cookiezi's Return");
 
         // creates an instance of my game
         MyGame game = new MyGame();
