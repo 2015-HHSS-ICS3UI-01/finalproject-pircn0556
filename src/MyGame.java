@@ -121,6 +121,8 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     BufferedImage SS = loadImage("SS (superpoints).png");
     BufferedImage heart = loadImage("health.png");
     BufferedImage title = loadImage("Game Title.jpg");
+    BufferedImage gameover = loadImage("Game Over.jpg");
+    BufferedImage YouWon = loadImage("You Win!.jpg");
     //the chasing monsters
     //1st
     BufferedImage peppy = loadImage("peppy.png");
@@ -172,16 +174,23 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
     //for the main screen
     int screen = 0;
     //for the game over screen
-    int gameover = 1;
+    int gameoverr = 0;
+    //for the you win screen
+    int won = 0;
     //colours
     Color border = new Color(255, 74, 243);
-    // sets the framerate and delay for our game
+    
+   //Score count -- starts at 0
+    int Score = 0;
+    //number of hearts
+    int heartcount = 5;
+    
+// sets the framerate and delay for our game
     // you just need to select an approproate framerate
     long desiredFPS = 60;
     long desiredTime = (1000) / desiredFPS;
-    //To input images
-
-    public BufferedImage loadImage(String filename) {
+//To input images
+   public BufferedImage loadImage(String filename) {
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File(filename));
@@ -190,15 +199,11 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         }
         return img;
     }
-    //Score count -- starts at 0
-    int Score = 0;
-    //number of hearts
-    int heartcount = 5;
+   
 
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
     // NOTE: This is already double buffered!(helps with framerate/speed)
-
     @Override
     public void paintComponent(Graphics g) {
         // always clear the screen first!
@@ -208,67 +213,82 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
         if (screen == 0) {
             g.drawImage(title, 0, 0, WIDTH, HEIGHT, null);
         }
-
+        //game over screen shows
+        if (gameoverr == 1) {
+            g.drawImage(gameover, 0, 0, WIDTH, HEIGHT, null);
+        }
+        //winning screen shows
+        if (won == 1) {
+            g.drawImage(YouWon, 0, 0, WIDTH, HEIGHT, null);
+        }
+        //makes main screen show
         if (screen == 1) {
-            g.setColor(Color.BLACK);
-            //create background
-            g.fillRect(0, 0, 750, 950);
-            //Border blocks
-            g.setColor(border);
-            //go through the blocks
-            for (Rectangle block : borderwall) {
-                //draw the block
-                g.fillRect(block.x, block.y, block.width, block.height);
-            }
-
-            //for points
-            g.setColor(Color.WHITE);
-            for (Rectangle point : points) {
-                g.fillOval(point.x, point.y, point.width, point.height);
-            }
-
-            //super points
-            g.setColor(Color.BLACK);
-            for (Rectangle superpoint : superpoints) {
-                //draw the poitns
-                g.drawImage(SS, superpoint.x, superpoint.y, superpoint.height, superpoint.width, null);
-            }
-
-            //hearts
-            g.setColor(Color.BLACK);
-            for (Rectangle hearts : health) {
-                //draw the poitns
-                g.drawImage(heart, hearts.x, hearts.y, hearts.height, hearts.width, null);
-            }
-
-            //rest of blocks
-            g.setColor(Color.BLACK);
-            for (Rectangle block : blocks) {
-                //draw the block
-                for (int x = block.x; x < block.x + block.width; x = x + 30) {
-                    for (int y = block.y; y < block.y + block.height; y = y + 30) {
-                        g.drawImage(blockimg, x, y, 30, 30, null);
+            //keeps game over screen hidden
+            if (gameoverr == 0) {
+                //keeps winning screen hidden
+                if (won == 0) {
+                    g.setColor(Color.BLACK);
+                    //create background
+                    g.fillRect(0, 0, 750, 950);
+                    //Border blocks
+                    g.setColor(border);
+                    //go through the blocks
+                    for (Rectangle block : borderwall) {
+                        //draw the block
+                        g.fillRect(block.x, block.y, block.width, block.height);
                     }
-                }
-            }
-            //monsters
-            //first one
-            g.drawImage(peppy, monsterone.x, monsterone.y, monsterone.width, monsterone.height, null);
-            //second one
-            g.drawImage(hvick, monstertwo.x, monstertwo.y, monstertwo.width, monstertwo.height, null);
-            //third one
-            g.drawImage(rrtyui, monsterthree.x, monsterthree.y, monsterthree.width, monsterthree.height, null);
-            //fourth one
-            g.drawImage(azer, monsterfour.x, monsterfour.y, monsterfour.width, monsterfour.height, null);
-            //player
-            g.setColor(Color.black);
-            g.drawImage(cookiezi, player.x, player.y, player.width, player.height, null);
 
-            //Text
-            g.setColor(Color.WHITE);
-            g.setFont(pixel);
-            g.drawString("Score: " + Score, 35, 60);
-            g.drawString("Health:", 470, 60);
+                    //for points
+                    g.setColor(Color.WHITE);
+                    for (Rectangle point : points) {
+                        g.fillOval(point.x, point.y, point.width, point.height);
+                    }
+
+                    //super points
+                    g.setColor(Color.BLACK);
+                    for (Rectangle superpoint : superpoints) {
+                        //draw the poitns
+                        g.drawImage(SS, superpoint.x, superpoint.y, superpoint.height, superpoint.width, null);
+                    }
+
+                    //hearts
+                    g.setColor(Color.BLACK);
+                    for (Rectangle hearts : health) {
+                        //draw the poitns
+                        g.drawImage(heart, hearts.x, hearts.y, hearts.height, hearts.width, null);
+                    }
+
+                    //rest of blocks
+                    g.setColor(Color.BLACK);
+                    for (Rectangle block : blocks) {
+                        //draw the block
+                        for (int x = block.x; x < block.x + block.width; x = x + 30) {
+                            for (int y = block.y; y < block.y + block.height; y = y + 30) {
+                                g.drawImage(blockimg, x, y, 30, 30, null);
+                            }
+                        }
+                    }
+            //monsters
+                    //first one
+                    g.drawImage(peppy, monsterone.x, monsterone.y, monsterone.width, monsterone.height, null);
+                    //second one
+                    g.drawImage(hvick, monstertwo.x, monstertwo.y, monstertwo.width, monstertwo.height, null);
+                    //third one
+                    g.drawImage(rrtyui, monsterthree.x, monsterthree.y, monsterthree.width, monsterthree.height, null);
+                    //fourth one
+                    g.drawImage(azer, monsterfour.x, monsterfour.y, monsterfour.width, monsterfour.height, null);
+                    //player
+                    g.setColor(Color.black);
+                    g.drawImage(cookiezi, player.x, player.y, player.width, player.height, null);
+
+                    //Text
+                    g.setColor(Color.WHITE);
+                    g.setFont(pixel);
+                    g.drawString("Score: " + Score, 35, 60);
+                    g.drawString("Health:", 470, 60);
+                }
+
+            }
 
         }
 
@@ -996,7 +1016,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
                         break;
                     }
                 }
-                int score = 25600;
+
                 //health points
                 for (Rectangle hearts : health) {
                     if (player.intersects(monsterone)) {
@@ -1017,8 +1037,13 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
                         break;
                     }
                 }
+                //if player wins after gaining 25600 points
+                if(Score==25600){
+                    won = 1;
+                }
+                //If all hearts gone change screen to the game over screen
                 if (heartcount <= 0) {
-                    gameover = 0;
+                    gameoverr = 1;
                 }
             }
 
@@ -1088,6 +1113,7 @@ public class MyGame extends JComponent implements KeyListener, MouseMotionListen
             //if enter pressed, title screen goes away
         } else if (key == KeyEvent.VK_ENTER) {
             screen = 1;
+
         }
     }
 
